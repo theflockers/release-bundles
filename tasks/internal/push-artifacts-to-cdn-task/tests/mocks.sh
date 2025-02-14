@@ -15,6 +15,9 @@ function oras() {
     elif [[ "$*" =~ push.* ]]; then
         echo Simulating oras push 
         echo "Digest: sha256:$(echo | sha256sum |awk '{ print $1}')"
+    elif [[ "$*" == *"nonexistent-disk-image"* ]]; then
+        echo Simulating failing oras pull call
+        exit 1
     elif [[ "$*" == "pull --registry-config"* ]]; then
         echo "Mocking pulling files"
         touch binary-windows-amd64.zip
@@ -26,9 +29,6 @@ function oras() {
         touch windows/binary-windows-amd64.exe
         touch linux/binary-linux-amd64
         touch macos/binary-darwin-amd64
-    elif [[ "$*" == *"nonexistent-disk-image"* ]]; then
-        echo Simulating failing oras pull call
-        exit 1
     fi
     touch fail_gzip.raw.gz
 }
